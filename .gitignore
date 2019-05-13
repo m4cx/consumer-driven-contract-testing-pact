@@ -1,0 +1,5 @@
+build/
+logs/
+.vs/
+bin/
+obj/
