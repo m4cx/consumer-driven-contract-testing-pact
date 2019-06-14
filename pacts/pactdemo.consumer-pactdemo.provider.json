@@ -11,7 +11,13 @@
       "providerState": "A Product with expected structure",
       "request": {
         "method": "get",
-        "path": "/9d59f862-2210-4ad5-9594-ed24cd271e27"
+        "path": "/e0c2e684-d83f-45c3-a6e5-d62a6f83a0bd",
+        "matchingRules": {
+          "$.path": {
+            "match": "regex",
+            "regex": "^\\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          }
+        }
       },
       "response": {
         "status": 200,
@@ -19,10 +25,21 @@
           "Content-Type": "application/json; charset=utf-8"
         },
         "body": {
-          "Id": "9d59f862-2210-4ad5-9594-ed24cd271e27",
-          "Name": "Test",
-          "Description": "A product for testing",
-          "EanCode": null
+          "id": "e0c2e684-d83f-45c3-a6e5-d62a6f83a0bd",
+          "name": "Test",
+          "description": "A product for testing"
+        },
+        "matchingRules": {
+          "$.body.id": {
+            "match": "regex",
+            "regex": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          },
+          "$.body.name": {
+            "match": "type"
+          },
+          "$.body.description": {
+            "match": "type"
+          }
         }
       }
     }

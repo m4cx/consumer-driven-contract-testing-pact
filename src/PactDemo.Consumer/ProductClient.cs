@@ -21,8 +21,6 @@ namespace PactDemo.Consumer
         {
             var response = await httpClient.GetAsync($"{id}");
             
-            
-
             var content = await response.Content.ReadAsStringAsync();
             Console.WriteLine("Content: " + content);
             response.EnsureSuccessStatusCode();

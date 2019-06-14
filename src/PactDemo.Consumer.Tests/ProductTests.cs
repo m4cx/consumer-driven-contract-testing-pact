@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using PactNet.Matchers;
 using PactNet.Mocks.MockHttpService.Models;
 using System;
 using System.Collections.Generic;
@@ -19,21 +20,23 @@ namespace PactDemo.Consumer.Tests
         [Test]
         public async Task GetProduct_ReturnsExpectedProduct()
         {
-            var expectedProductId = Guid.NewGuid();
-            var expectedProduct = new Product
+            var guidRegex = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
+            var expectedProductId = Guid.Parse("E0C2E684-D83F-45C3-A6E5-D62A6F83A0BD");
+            var expectedName = "Test";
+            var expectedProduct = new
             {
-                Id = expectedProductId,
-                Name = "Test",
-                Description = "A product for testing",
-                EanCode = null
+                id = Match.Regex(expectedProductId.ToString(), $"^{guidRegex}$"),
+                name = Match.Type(expectedName),
+                description = Match.Type("A product for testing"),
             };
+
             MockProviderService
                 .Given("A Product with expected structure") // Describe the state the provider needs to setup
                 .UponReceiving("a GET request for a single product") // textual description - business case
                 .With(new ProviderServiceRequest
                 {
                     Method = HttpVerb.Get,
-                    Path = $"/{expectedProductId}",
+                    Path = Match.Regex($"/{expectedProductId}", $"^\\/{guidRegex}$"),
                 })
                 .WillRespondWith(new ProviderServiceResponse
                 {
@@ -48,8 +51,8 @@ namespace PactDemo.Consumer.Tests
             var consumer = new ProductClient(MockServerBaseUri);
             var result = await consumer.Get(expectedProductId);
 
-            Assert.AreEqual(expectedProduct.Id, result.Id);
-            Assert.AreEqual(expectedProduct.Name, result.Name);
+            Assert.AreEqual(expectedProductId, result.Id);
+            Assert.AreEqual(expectedName, result.Name);
 
             MockProviderService.VerifyInteractions();
         }
