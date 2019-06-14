@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PactDemo.Consumer\PactDemo.Consumer.csproj" />
+    <ProjectReference Include="..\PactDemo.Provider\PactDemo.Provider.csproj" />
   </ItemGroup>
 
 </Project>

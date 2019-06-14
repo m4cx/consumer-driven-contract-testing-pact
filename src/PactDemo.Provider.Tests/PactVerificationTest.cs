@@ -62,5 +62,25 @@ namespace Tests
                 .PactUri(@"..\..\..\..\..\pacts\pactdemo.consumer-pactdemo.provider.json")
                 .Verify();
         }
+
+        [Test]
+        [Ignore("PACT BROKER")]
+        public void EnsurePactDemoProviderHobnoursPactWithPactDemoConsumerUsingPactBroker()
+        {
+            var config = new PactVerifierConfig
+            {
+                ProviderVersion = "1.0.0",
+                PublishVerificationResults = true,
+                Verbose = true
+            };
+
+            Console.WriteLine($"Current: {Environment.CurrentDirectory}");
+            var pactVerifier = new PactVerifier(config);
+            pactVerifier.ProviderState($"{pactServiceUri}/provider-states")
+                .ServiceProvider("PactDemo.Provider", $"{providerServiceUri}")
+                .HonoursPactWith("PactDemo.Consumer")
+                .PactUri("http://localhost:8090/pacts/provider/PactDemo.Provider/consumer/PactDemo.Consumer/latest")
+                .Verify();
+        }
     }
 }

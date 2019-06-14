@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using PactNet;
 using PactNet.Matchers;
 using PactNet.Mocks.MockHttpService.Models;
 using System;
@@ -56,5 +57,17 @@ namespace PactDemo.Consumer.Tests
 
             MockProviderService.VerifyInteractions();
         }
+
+        #region Pact-Broker
+
+        [Test]
+        [Ignore("PACT BROKER")]
+        public async Task PublishToPactBroker()
+        {
+            var pactPublisher = new PactPublisher("http://localhost:8090");
+            pactPublisher.PublishToBroker($"../../pacts/{ConsumerName.ToLower()}-{ProviderName.ToLower()}.json", "1.0.0");
+        }
+
+        #endregion
     }
 }
